@@ -5,6 +5,7 @@ import random
 import constants
 import envelope
 
+
 class WaveformSpec(object):
   def __init__(self, freq_f, amp_f, sec_f, envelope, freq_delta_f=None):
     self._freq_f = freq_f
@@ -98,53 +99,3 @@ def WhiteNoise(spec):
 # defined in this file. Otherwise constants.py would have to include this
 # file, which would be a circular import.
 WAVEFORMS_DICT = {'sine': Sine, 'square': Square, 'white': WhiteNoise}
-
-################################################################
-
-def ArpeggioUp():
-  """
-  returns:
-  notes: list
-  """
-  notes = []
-  for _, freq in constants.KEYBOARD.items():
-    notes.append(freq)
-  return notes
-
-
-def ArpeggioDown():
-  notes = []
-  for _, freq in constants.KEYBOARD.items()[::-1]:
-    notes.append(freq)
-  return notes
-
-# def SineGlissando(samples_int, freq, freq_delta, framerate, amp):
-#   sine_list = []
-#   for x in range(samples_int):
-
-#     # recalculated here because the freq is different
-#     omega = 2 * math.pi * freq
-#     t = x / framerate
-#     sine_list.append(int(math.sin(omega * t) * amp))
-
-#     # glissando
-#     freq = freq + freq_delta
-
-#   return sine_list
-
-# def SquareGlissando(samples_int, freq, freq_delta, framerate, amp):
-#   square_list = []
-#   flag = False
-#   for x in range(samples_int):
-#     frames_per_oscillation = framerate / freq
-
-#     if x % frames_per_oscillation < 1.0:
-#       flag = not flag
-#       final_value = int(flag * amp)
-
-#     square_list.append(final_value)
-
-#     # glissando
-#     freq = freq + freq_delta
-
-#   return square_list
