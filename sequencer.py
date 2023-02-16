@@ -6,38 +6,6 @@ import waveforms
 COMMON_TIME = 4
 
 
-def PureMode():
-  total_list = []
-
-  form = str(constants.ShortForm(input(
-    "Waveform type? [s]ine | [sq]uare | [w]hite \n:")) or constants.DEFAULT_WAVEFORM_TYPE)
-  if form not in waveforms.WAVEFORMS_DICT.keys():
-    sys.exit("Unsupported waveform!")
-  sec_f = int(input("Seconds?\n:") or constants.DEFAULT_DURATION)
-
-  if form == "sine":
-    freq_f = float(input("Freq? eg, 220\n:") or constants.DEFAULT_FREQ)
-    spec = waveforms.WaveformSpec(freq_f, constants.TWO_BIT_AMP_MAX, sec_f, envelope.Envelope())
-    total_list = waveforms.Sine(spec)
-
-  elif form == "square":
-    freq_f = float(input("Freq? eg, 220\n:") or constants.DEFAULT_FREQ)
-    spec = waveforms.WaveformSpec(freq_f, constants.TWO_BIT_AMP_MAX, sec_f, envelope.Envelope())
-    total_list = waveforms.Square(spec)
-
-  elif form == "white":
-    freq_f = float(input("Median freq? eg, 20000\n:") or constants.DEFAULT_WHITENOISE_FREQ)
-    deviation_f = float(input("Deviation? eg, 10000\n:") or constants.DEFAULT_WHITENOISE_DEVIATION)
-
-    # I think this always stays at 1.0, because we're not generating sine waves
-    # from radians, just absolute amplitudes.
-    amp_f = 1.0
-    spec = waveforms.WaveformSpec(freq_f, amp_f, sec_f, envelope.Envelope(), deviation_f)
-    total_list = waveforms.WhiteNoise(spec)
-
-  return total_list
-
-
 def NoteSequence():
   total_list = []
   more = "y"
