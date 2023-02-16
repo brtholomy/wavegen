@@ -1,4 +1,7 @@
 import collections
+from enum import Enum
+
+import scales
 
 
 LOG_FILE_STR = "./output/log/wave_log.txt"
@@ -20,9 +23,39 @@ SAMPWIDTH_INT = 2
 FILENAME_STR = "output/output.wav"
 
 ################################################################################
+# user interface strings
+
+MODES = Enum('modes', ['simple', 'notes', 'arpeggiator'])
+
+SCALES = {
+  'pentatonic' : scales.Pentatonic,
+  'bhairavi' : scales.Bhairavi,
+  'major' : scales.Major,
+  'minor' : scales.Minor,
+}
+
+# TODO: fix this duplication, get rid of ShortForm(). Use Enums everywhere.
+SHORTFORMS = {
+  '' : None,
+  's' : 'simple',
+  'n' : 'notes',
+  'a' : 'arpeggiator',
+  'sin' : 'sine',
+  'sq' : 'square',
+  'w' : 'white',
+  'p' : 'pentatonic',
+  'b' : 'bhairavi',
+  'maj' : 'major',
+  'min' : 'minor',
+}
+
+def ShortForm(cmd):
+  return SHORTFORMS[cmd]
+
+################################################################################
 # used in our wave generation functions
 
-DEFAULT_SOUND_TYPE = "pure"
+DEFAULT_SOUND_TYPE = "simple"
 DEFAULT_WAVEFORM_TYPE = "sine"
 DEFAULT_DURATION = 3
 DEFAULT_FREQ = 220.0
@@ -33,21 +66,7 @@ DEFAULT_MEASURE = 4
 DEFAULT_NOTE = 'A4'
 DEFAULT_AMP = 0.3
 DEFAULT_NOTE_LENGTH = 4
-
-################################################################################
-# user interface strings
-
-SHORTFORMS = {
-  '' : None,
-  'p' : 'pure',
-  'n' : 'notes',
-  's' : 'sine',
-  'sq' : 'square',
-  'w' : 'white',
-}
-
-def ShortForm(cmd):
-  return SHORTFORMS[cmd]
+DEFAULT_SCALE = 'pentatonic'
 
 ################################################################################
 # Frequency constants

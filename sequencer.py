@@ -42,3 +42,23 @@ def NotesPerMeasureToSec(measure_ratio_int, beats_per_measure_f, bpm_int):
   sec_per_beat_f = float(60.0 / bpm_int)
   sec_f  = sec_per_beat_f * beat_ratio_f
   return sec_f
+
+
+def ArpeggiatorSequence(
+    amp_f,
+    sec_f,
+    wavefunc,
+    keyscale):
+  total_list = []
+  note_list = note.NoteList()
+  # just for representation
+  # note_seq = []
+
+  for freq_f in keyscale:
+    spec = waveforms.WaveformSpec(freq_f, amp_f, sec_f, envelope.Envelope())
+
+    new_note = note.Note(wavefunc, spec)
+    note_list.Append(new_note)
+
+  total_list = note.GenerateAmplitudeList(note_list)
+  return total_list

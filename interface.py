@@ -1,17 +1,31 @@
 import logging
 import sys
 
+import arpeggiator
 import constants
 import envelope
 import sequencer
+import scales
 import waveforms
+
+
+def GetMode():
+  modestr = constants.ShortForm(input(
+    "Simple waveform, manual sequence, or arpeggiator?\n" +
+    "[s]imple | [n]otes | [a]rp \n:")
+                                 ) or constants.DEFAULT_SOUND_TYPE
+  try:
+    mode = constants.MODES[modestr]
+  except:
+    raise ValueError(f'Unsupported mode: {modestr}')
+  return mode
 
 
 def GetWaveForm():
   form = str(constants.ShortForm(input(
-    "Waveform type? [s]ine | [sq]uare | [w]hite \n:")) or constants.DEFAULT_WAVEFORM_TYPE)
+    "Waveform type? [sin]e | [sq]uare | [w]hite \n:")) or constants.DEFAULT_WAVEFORM_TYPE)
   if form not in waveforms.WAVEFORMS_DICT.keys():
-    sys.exit("Unsupported waveform!")
+    raise ValueError(f"Unsupported waveform: {form}")
   return form
 
 
@@ -37,25 +51,30 @@ def GetMore():
 
 def GetBpm():
   bpm_int = int(input("BPM? 30 - 400\n:") or constants.DEFAULT_BPM)
-  assert 30 <= bpm_int <= 400
+  if not 30 <= bpm_int <= 400:
+    raise ValueError(f"Invalid beats per minute: {bpm_int}")
   return bpm_int
 
 
 def GetMeasure():
-  beats_per_measure_f = float(input("Beats per measure? 3 - 8 \n:") or constants.DEFAULT_MEASURE)
-  assert 3 <= beats_per_measure_f <= 8
+  beats_per_measure_f = float(input("Beats per measure? 3 - 16 \n:") or constants.DEFAULT_MEASURE)
+  if not 3 <= beats_per_measure_f <= 16:
+    raise ValueError(f"Invalid beats per measure: {beats_per_measure_f}")
   return beats_per_measure_f
 
 
 def GetAmplitude():
   amp_ratio_f = float(input("Amplitude? 0.1 - 1.0\n:") or constants.DEFAULT_AMP)
-  assert 0 < amp_ratio_f <= 1
+  if not 0 < amp_ratio_f <= 1:
+    raise ValueError(f"Invalid amplitude: {amp_ratio_f}")
   amp_f = amp_ratio_f * constants.TWO_BIT_AMP_MAX
   return amp_f
 
 
 def GetNoteFreq():
   note_name = str(input("Note? eg, A4 \n:") or constants.DEFAULT_NOTE)
+  if note_name not in constants.KEYBOARD:
+    raise ValueError(f"Note not found in keyboard: {note_name}")
   freq_f = constants.KEYBOARD[note_name]
   return note_name, freq_f
 
@@ -65,17 +84,18 @@ def GetMeasureRatio():
   return measure_ratio_int
 
 
-def MasterInterface():
-  modes = ['pure', 'notes']
-  mode = str(constants.ShortForm(input(
-    "Pure waveform, manual sequence\n" +
-    "[p]ure | [n]otes | [a]rp \n:")
-                                 ) or constants.DEFAULT_SOUND_TYPE)
-  if mode not in modes:
-    sys.exit("Unsupported mode!")
+def GetScale():
+  scalestr = str(constants.ShortForm(input(
+    "Scale? [p]entatonic | [b]hairavi | [maj]or | [min]or \n:")) or constants.DEFAULT_SCALE)
+  if scalestr not in constants.SCALES:
+    raise ValueError(f"Unsupported scale: {scalestr}")
+  return constants.SCALES[scalestr]
 
+
+def MasterInterface():
+  mode = GetMode()
   total_list = []
-  if mode == 'pure':
+  if mode is constants.MODES.simple:
     form = GetWaveForm()
     wavefunc = waveforms.WAVEFORMS_DICT[form]
     sec_f = GetDuration()
@@ -94,7 +114,7 @@ def MasterInterface():
       spec = waveforms.WaveformSpec(freq_f, amp_f, sec_f, envelope.Envelope(), deviation_f)
       total_list = wavefunc(spec)
 
-  elif mode == 'notes':
+  elif mode is constants.MODES.notes:
     form = GetWaveForm()
     wavefunc = waveforms.WAVEFORMS_DICT[form]
     bpm_int = GetBpm()
@@ -102,5 +122,20 @@ def MasterInterface():
     amp_f = GetAmplitude()
     total_list = sequencer.NoteSequence(
       bpm_int, beats_per_measure_f, amp_f, wavefunc, GetNoteFreq, GetMeasureRatio, GetMore)
+
+  elif mode is constants.MODES.arpeggiator:
+    form = GetWaveForm()
+    wavefunc = waveforms.WAVEFORMS_DICT[form]
+    bpm_int = GetBpm()
+    beats_per_measure_f = GetMeasure()
+    measure_ratio_int = GetMeasureRatio()
+    amp_f = GetAmplitude()
+    # TODO: ask the user for the scale
+    scale = GetScale()
+    root, freq_f = GetNoteFreq()
+
+    sec_f = sequencer.NotesPerMeasureToSec(measure_ratio_int, beats_per_measure_f, bpm_int)
+    keyscale = arpeggiator.GetKeyScale(constants.KEYBOARD, scale, root)
+    total_list = sequencer.ArpeggiatorSequence(amp_f, sec_f, wavefunc, keyscale)
 
   return total_list
