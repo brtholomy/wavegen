@@ -31,9 +31,9 @@ class NoteList(object):
   def GetList(self):
     return self._notes
 
+
 # How do I want to generate amplitude lists? A separate function? I envision
 # adding notes on the fly, then processing to produce the file?
-
 def GenerateAmplitudeList(notes):
   assert isinstance(notes, NoteList)
   amp_list = []
