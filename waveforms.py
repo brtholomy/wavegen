@@ -7,6 +7,9 @@ import envelope
 
 
 class WaveformSpec(object):
+  """
+  Holds all information necessary to create a waveform.
+  """
   def __init__(self, freq_f, amp_f, sec_f, envelope, freq_delta_f=None):
     self._freq_f = freq_f
     self._amp_f = amp_f

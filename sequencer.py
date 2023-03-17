@@ -7,6 +7,8 @@ COMMON_TIME = 4
 
 
 def NoteSequence(bpm_int, beats_per_measure_f, amp_f, wavefunc, GetNoteFreq, GetMeasureRatio, GetMore):
+  """Creates a total_list of amplitudes representing an arbitrary number of notes.
+  """
   total_list = []
   more = "y"
   note_list = note.NoteList()
@@ -49,6 +51,9 @@ def ArpeggiatorSequence(
     sec_f,
     wavefunc,
     keyscale):
+  """Creates a total_list of amplitudes representing an arpeggio along a given
+  keyscale.
+  """
   total_list = []
   note_list = note.NoteList()
   # just for representation

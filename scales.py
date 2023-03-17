@@ -2,9 +2,9 @@ from enum import IntEnum
 
 
 class Pentatonic(IntEnum):
-  # enum value is interval distance from tonic. Would be easier in looping to
-  # specify the interval from previous note, but that's not typically how
-  # musicians think of a scale.
+  """Enum value is interval distance from tonic. Would be easier in looping to
+  specify the interval from previous note, but that's not typically how
+  musicians think of a scale."""
   root = 0
   third = 3
   fourth = 5

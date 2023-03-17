@@ -5,6 +5,10 @@ import scales
 
 
 def GetKeyScale(keyboard, scale, root):
+  """Creates a list of frequencies as float values, representing notes along a
+  scale. The frequencies are provided by the keyboard dict, while the scale
+  enum provides the interval distance from the root.
+  """
   if len(keyboard.keys()) < 12:
     raise IndexError('keyboard is too small')
 
