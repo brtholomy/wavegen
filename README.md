@@ -13,9 +13,9 @@ run:
 ## TODO
 
 * Improve the interface for easier experimentation. Switch to CLI flags rather than interactive.
-* Add envelope options. As it is, attack, sustain, and decay have only default values.
-* Try more math stuff. Logarithmic pitch changes, etc.
-* Add more scales.
+* Add envelope configuration to the interface. The constructs already accept arbitrary values for attack, sustain, and decay.
+* Implement logarithmic distributions for frequency, amplitude, and scale interval.
+* Add more exotic scales, possibly all 12 Greek + a few core Indian ragas.
 
 ## Won't do
 

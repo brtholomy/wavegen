@@ -1,4 +1,4 @@
-python3.11 wavegen.py
+python wavegen.py
 SUCCESS=$?
 
 if [ $SUCCESS -eq 0 ];then
