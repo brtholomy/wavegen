@@ -67,6 +67,9 @@ DEFAULT_NOTE = 'A4'
 DEFAULT_AMP = 0.3
 DEFAULT_NOTE_LENGTH = 4
 DEFAULT_SCALE = 'pentatonic'
+DEFAULT_ATTACK = 0.2
+DEFAULT_DECAY = 0.2
+DEFAULT_RELEASE = 0.4
 
 ################################################################################
 # Frequency constants

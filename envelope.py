@@ -1,15 +1,19 @@
-DEFAULT_ATTACK = 0.2
-DEFAULT_DECAY = 0.2
-DEFAULT_RELEASE = 0.4
+import constants
 
 
-# attack, decay, sustain, release
-# for each:
-# 1. target amp
-# 2. time
-# can assume constant slope for now. Unless logarithmic just sounds better.
 class Envelope(object):
-  def __init__(self, attack_sec_f=DEFAULT_ATTACK, decay_sec_f=DEFAULT_DECAY, release_sec_f=DEFAULT_RELEASE):
+  """
+  In digital music terms, an "envelope" consists of:
+  attack, decay, sustain, release
+
+  For each we specify:
+  1. target amp
+  2. time
+
+  Can assume constant slope for now. Unless logarithmic just sounds better.
+  """
+
+  def __init__(self, attack_sec_f=constants.DEFAULT_ATTACK, decay_sec_f=constants.DEFAULT_DECAY, release_sec_f=constants.DEFAULT_RELEASE):
     self._attack_sec_f = attack_sec_f
     self._decay_sec_f = decay_sec_f
     self._release_sec_f = release_sec_f
@@ -24,9 +28,11 @@ class Envelope(object):
     return self._release_sec_f
 
 
-# The waveform func should call this to get the amp constant, and multiply it
-# by the sine/sq result.
 def ModulateToInt(spec, t, y):
+  """
+  The waveform func should call this to get the amp constant, and multiply it
+  by the sine/sq result.
+  """
   return int(ModulationValue(spec, t) * spec.GetAmp() * y)
 
 

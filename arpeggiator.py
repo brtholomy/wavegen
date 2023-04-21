@@ -38,8 +38,5 @@ def GetKeyScale(keyboard, scale, root):
 
 
 if __name__ == '__main__':
-
-  # print(list(constants.KEYBOARD.keys()).index('C4'))
-
   keyscale = GetKeyScale(constants.KEYBOARD, scales.Pentatonic, 'A0')
   print(keyscale)
