@@ -25,7 +25,7 @@ FILENAME_STR = "output/output.wav"
 ################################################################################
 # user interface strings
 
-MODES = Enum('modes', ['simple', 'notes', 'arpeggiator'])
+MODES = Enum('modes', ['simple', 'notes', 'arpeggiator', 'log'])
 
 SCALES = {
   'pentatonic' : scales.Pentatonic,
@@ -40,6 +40,7 @@ SHORTFORMS = {
   's' : 'simple',
   'n' : 'notes',
   'a' : 'arpeggiator',
+  'l' : 'log',
   'sin' : 'sine',
   'sq' : 'square',
   'w' : 'white',
@@ -70,9 +71,12 @@ DEFAULT_SCALE = 'pentatonic'
 DEFAULT_ATTACK = 0.2
 DEFAULT_DECAY = 0.2
 DEFAULT_RELEASE = 0.4
+DEFAULT_LIMITN = 100
 
 ################################################################################
 # Frequency constants
+
+DEFAULT_MAX_FREQ = 40000.0
 
 # tempered chromatic scale. 'name' : Hz
 KEYBOARD = collections.OrderedDict()

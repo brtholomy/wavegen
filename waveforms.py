@@ -57,6 +57,7 @@ def Sine(spec):
     y_value = math.sin(omega * t)
 
     # multiplied by constant amp factor
+    # TODO: allow constant amp for a curve
     # amp_value = int(y_value * spec.GetAmp())
     amp_value = envelope.ModulateToInt(spec, t, y_value)
 

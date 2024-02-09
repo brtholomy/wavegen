@@ -1,5 +1,6 @@
 import logging
 import sys
+import math
 
 import arpeggiator
 import constants
@@ -12,7 +13,7 @@ import waveforms
 def GetMode():
   modestr = constants.ShortForm(input(
     "Simple waveform, manual sequence, or arpeggiator?\n" +
-    "[s]imple | [n]otes | [a]rp \n:")
+    "[s]imple | [n]otes | [a]rp | [l]og \n:")
                                  ) or constants.DEFAULT_SOUND_TYPE
   try:
     mode = constants.MODES[modestr]
@@ -30,7 +31,7 @@ def GetWaveForm():
 
 
 def GetDuration():
-  return int(input("Seconds?\n:") or constants.DEFAULT_DURATION)
+  return float(input("Seconds?\n:") or constants.DEFAULT_DURATION)
 
 
 def GetFreq():
@@ -91,6 +92,9 @@ def GetScale():
     raise ValueError(f"Unsupported scale: {scalestr}")
   return constants.SCALES[scalestr]
 
+def GetLimitN():
+  limitn = int(input("Limit of n? eg, 100\n:") or constants.DEFAULT_LIMITN)
+  return limitn
 
 def MasterInterface():
   mode = GetMode()
@@ -137,5 +141,17 @@ def MasterInterface():
     sec_f = sequencer.NotesPerMeasureToSec(measure_ratio_int, beats_per_measure_f, bpm_int)
     keyscale = arpeggiator.GetKeyScale(constants.KEYBOARD, scale, root)
     total_list = sequencer.ArpeggiatorSequence(amp_f, sec_f, wavefunc, keyscale)
+
+  if mode is constants.MODES.log:
+    form = GetWaveForm()
+    wavefunc = waveforms.WAVEFORMS_DICT[form]
+    sec_f = GetDuration()
+    amp_f = GetAmplitude()
+    freq_f = GetFreq()
+    limitn = GetLimitN()
+    # (1 + 1/n)^n
+    factor_func = lambda i: (1 + 1/i)**i
+    total_list = sequencer.FreqSequence(amp_f, wavefunc, freq_f, sec_f,
+                                        factor_func, limitn)
 
   return total_list

@@ -33,6 +33,25 @@ def NoteSequence(bpm_int, beats_per_measure_f, amp_f, wavefunc, GetNoteFreq, Get
   return total_list
 
 
+def FreqSequence(amp_f, wavefunc, freq_f, sec_f, factor_func, limitn):
+  """Creates a total_list of amplitudes representing an arbitrary number of notes.
+  """
+  total_list = []
+  note_list = note.NoteList()
+  orig_f = freq_f
+
+  for i in range(1, limitn+1):
+    spec = waveforms.WaveformSpec(freq_f, amp_f, sec_f, envelope.Envelope())
+    new_note = note.Note(wavefunc, spec)
+    note_list.Append(new_note)
+    # raise original freq by the given factor
+    freq_f = (orig_f * factor_func(i)) % constants.DEFAULT_MAX_FREQ
+    print(sec_f * i, factor_func(i), freq_f)
+
+  total_list = note.GenerateAmplitudeList(note_list)
+  return total_list
+
+
 def NotesPerMeasureToSec(measure_ratio_int, beats_per_measure_f, bpm_int):
   # In common time 4/4:
   # 1 measure_ratio = 4 beat_ratio
