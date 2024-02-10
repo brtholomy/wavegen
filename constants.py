@@ -4,7 +4,7 @@ from enum import Enum
 import scales
 
 
-LOG_FILE_STR = "./output/log/wave_log.txt"
+LOG_FILE_STR = "./output/wavegen_log.txt"
 
 ################################################################################
 # these all get passed into the "wave" module, via write_wave_file.py:
